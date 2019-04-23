@@ -4,6 +4,9 @@ cache: false
 env:
 - URL=https://developer.salesforce.com/media/salesforce-cli/sfdx-linux-amd64.tar.xz
 before_install:
+- openssl aes-256-cbc -K $encrypted_5c3861353c6c_key -iv $encrypted_5c3861353c6c_iv
+  -in /Users/t_pulk/Documents/Mavensmate/dxTrail/justDx/salesforcealm/assets/server.key.enc
+  -out ~\/Documents/Mavensmate/dxTrail/justDx/salesforcealm/assets/server.key -d
 - openssl aes-256-cbc -K $encrypted_a16ae3ec4b79_key -iv $encrypted_a16ae3ec4b79_iv
   -in assets/server.key.enc -out assets/server.key -d
 - export SFDX_AUTOUPDATE_DISABLE=false
@@ -17,10 +20,11 @@ before_install:
 - export PATH=./sfdx/$(pwd):$PATH
 - sfdx --version
 - sfdx plugins --core
-- sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key --username $USERNAME --setdefaultdevhubusername -a HubOrg
+- sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
+  --username $USERNAME --setdefaultdevhubusername -a HubOrg
 script:
-#Push all code to scratch org   
-- sfdx force:org:create -v HubOrg -s -f config/project-scratch-def.json -a ciorg -w 10
+- sfdx force:org:create -v HubOrg -s -f config/project-scratch-def.json -a ciorg -w
+  10
 - sfdx force:org:display -u ciorg
 - sleep 300
 - sfdx force:source:push -u ciorg
